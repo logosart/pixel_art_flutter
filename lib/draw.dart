@@ -153,14 +153,14 @@ class _DrawPageState extends State<DrawPage> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.grey[300],
           border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(9),
         ),
-        child: Text(toolName),
+        child: toolName == 'Borracha' ? Image.asset('assets/borracha.png') : Text(toolName),
       ),
     );
   }

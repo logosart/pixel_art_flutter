@@ -17,3 +17,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/    # Adicione esta linha para incluir todo o conteúdo do diretório assets

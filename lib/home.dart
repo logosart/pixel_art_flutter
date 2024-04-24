@@ -6,39 +6,51 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        backgroundColor: Color.fromARGB(255, 71, 71, 71), // Define a cor de fundo da appbar como cinza
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar( // Move o perfil para o canto superior esquerdo
+            backgroundImage: NetworkImage('URL_DA_IMAGEM'),
+            radius: 20,
+          ),
+        ),
+        title: Center(child: Text('Home')), // Centraliza o texto 'Home' na appbar
         actions: [
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.menu), // Adiciona o ícone do menu de 3 barras no lado superior direito
             onPressed: () {
               // Adicione ação para o menu de 3 barras
             },
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage('URL_DA_IMAGEM'),
-              radius: 30,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _mostrarDialogoCriar(context);
-              },
-              child: Text('Criar'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Ação para o botão "Importar"
-              },
-              child: Text('Importar'),
-            ),
-          ],
+      body: Container(
+        color: const Color.fromARGB(255, 92, 92, 92), // Altera a cor do corpo da tela para vermelho
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _mostrarDialogoCriar(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Criar"
+                ),
+                child: Text('Criar'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _importarPixelArt(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Importar"
+                ),
+                child: Text('Importar'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -94,5 +106,9 @@ class HomePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _importarPixelArt(BuildContext context) {
+    // Ação para o botão "Importar"
   }
 }
