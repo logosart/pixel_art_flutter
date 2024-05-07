@@ -25,134 +25,58 @@ class _DrawPageState extends State<DrawPage> {
   }
 
   void _inicializarPixels() {
-    for (int i = 0; i < widget.altura; i++) {
-      pixels.add(List<Color>.filled(widget.largura, Colors.white));
-    }
+    pixels = List.generate(widget.altura, (linha) => List.filled(widget.largura, Colors.white));
   }
 
   @override
   Widget build(BuildContext context) {
     double tamanhoPixel = 20.0;
+    double canvasWidth = tamanhoPixel * widget.largura;
+    double canvasHeight = tamanhoPixel * widget.altura;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Desenho'),
         actions: [
           IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              // Adicione ação para o menu de 3 barras
-            },
+            icon: Icon(Icons.save),
+            onPressed: _captureImage,
           ),
         ],
       ),
-      body: Column(
-        children: [
-          _buildColorPalette(),
-          _buildToolPalette(),
-          Expanded(
-            child: GestureDetector(
-              onPanUpdate: (details) {
-                setState(() {
-                  RenderBox renderBox = context.findRenderObject() as RenderBox;
-                  Offset localPosition = renderBox.globalToLocal(details.globalPosition);
-                  int coluna = (localPosition.dx / tamanhoPixel).floor();
-                  int linha = (localPosition.dy / tamanhoPixel).floor();
-                  if (linha >= 0 &&
-                      linha < widget.altura &&
-                      coluna >= 0 &&
-                      coluna < widget.largura) {
-                    pixels[linha][coluna] = _selectedColor == _originalColor ? Colors.white : _selectedColor;
-                  }
-                });
-              },
-              child: CustomPaint(
-                size: Size(tamanhoPixel * widget.largura, tamanhoPixel * widget.altura),
-                painter: DrawingPainter(pixels: pixels, tamanhoPixel: tamanhoPixel),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: canvasWidth,
+              height: canvasHeight,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+              ),
+              child: GestureDetector(
+                onPanUpdate: (details) {
+                  setState(() {
+                    RenderBox renderBox = context.findRenderObject() as RenderBox;
+                    Offset localPosition = renderBox.globalToLocal(details.localPosition); // Corrigir aqui
+                    int coluna = (localPosition.dx / tamanhoPixel).floor();
+                    int linha = (localPosition.dy / tamanhoPixel).floor();
+                    if (linha >= 0 &&
+                        linha < widget.altura &&
+                        coluna >= 0 &&
+                        coluna < widget.largura) {
+                      pixels[linha][coluna] =
+                          _selectedColor == _originalColor ? Colors.white : _selectedColor;
+                    }
+                  });
+                },
+                child: CustomPaint(
+                  size: Size(canvasWidth, canvasHeight),
+                  painter: DrawingPainter(pixels: pixels, tamanhoPixel: tamanhoPixel),
+                ),
               ),
             ),
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _captureImage,
-        child: Icon(Icons.save),
-      ),
-    );
-  }
-
-  Widget _buildColorPalette() {
-    return Container(
-      height: 50,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          SizedBox(width: 8),
-          _buildColorButton(Colors.black),
-          _buildColorButton(Colors.red),
-          _buildColorButton(Colors.blue),
-          _buildColorButton(Colors.green),
-          _buildColorButton(Colors.yellow),
-          _buildColorButton(Colors.orange),
-          SizedBox(width: 8),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildColorButton(Color color) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedColor = color;
-        });
-      },
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          border: Border.all(
-            color: _selectedColor == color ? Colors.white : Colors.black,
-            width: 2,
-          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildToolPalette() {
-    return Container(
-      height: 50,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          SizedBox(width: 8),
-          _buildToolButton('Borracha'),
-          SizedBox(width: 8),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildToolButton(String toolName) {
-    return GestureDetector(
-      onTap: () {
-        if (toolName == 'Borracha') {
-          setState(() {
-            _selectedColor = _originalColor;
-          });
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 0),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(9),
-        ),
-        child: toolName == 'Borracha' ? Image.asset('assets/borracha.png') : Text(toolName),
       ),
     );
   }
