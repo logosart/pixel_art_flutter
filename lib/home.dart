@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'draw.dart'; // Importe a página draw.dart aqui
+import 'import.dart'; // Importe a página import.dart aqui
 
 class HomePage extends StatelessWidget {
   @override
@@ -109,6 +110,11 @@ class HomePage extends StatelessWidget {
   }
 
   void _importarPixelArt(BuildContext context) {
-    // Ação para o botão "Importar"
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImportPage(), // Navegar para a página de importação
+      ),
+    );
   }
 }

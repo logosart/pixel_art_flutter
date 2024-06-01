@@ -19,6 +19,19 @@ class _DrawPageState extends State<DrawPage> {
   Color _originalColor = Colors.white;
   bool _modoApagar = false; // Adicionando estado para o modo de apagar
 
+  List<Color> colorList = [
+    Colors.black,
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.orange,
+    Colors.purple,
+    Colors.teal,
+  ];
+
+  double _zoomLevel = 1.0;
+
   @override
   void initState() {
     super.initState();
@@ -53,34 +66,70 @@ class _DrawPageState extends State<DrawPage> {
           ),
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              width: canvasWidth,
-              height: canvasHeight,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-              ),
-              child: GestureDetector(
-                onTapDown: (details) {
-                  _apagar(details.localPosition, tamanhoPixel);
-                },
-                onPanUpdate: (details) {
-                  _apagar(details.localPosition, tamanhoPixel);
-                },
-                onPanDown: (details) {
-                  _apagar(details.localPosition, tamanhoPixel);
-                },
-                child: CustomPaint(
-                  size: Size(canvasWidth, canvasHeight),
-                  painter: DrawingPainter(
-                      pixels: pixels, tamanhoPixel: tamanhoPixel),
+      body: Column(
+        children: [
+          Container(
+            height: 50,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: colorList.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedColor = colorList[index];
+                    });
+                  },
+                  child: Container(
+                    width: 50,
+                    color: colorList[index],
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: GestureDetector(
+                    onScaleUpdate: (details) {
+                      setState(() {
+                        _zoomLevel = details.scale;
+                      });
+                    },
+                    child: Transform.scale(
+                      scale: _zoomLevel,
+                      child: Container(
+                        width: canvasWidth,
+                        height: canvasHeight,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: GestureDetector(
+                          onTapDown: (details) {
+                            _apagar(details.localPosition, tamanhoPixel);
+                          },
+                          onPanUpdate: (details) {
+                            _apagar(details.localPosition, tamanhoPixel);
+                          },
+                          onPanDown: (details) {
+                            _apagar(details.localPosition, tamanhoPixel);
+                          },
+                          child: CustomPaint(
+                            size: Size(canvasWidth, canvasHeight),
+                            painter: DrawingPainter(
+                                pixels: pixels, tamanhoPixel: tamanhoPixel),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -94,8 +143,8 @@ class _DrawPageState extends State<DrawPage> {
   void _apagar(Offset localPosition, double tamanhoPixel) {
     setState(() {
       RenderBox renderBox = context.findRenderObject() as RenderBox;
-      int coluna = (localPosition.dx / tamanhoPixel).floor();
-      int linha = (localPosition.dy / tamanhoPixel).floor();
+      int coluna = (localPosition.dx / (tamanhoPixel * _zoomLevel)).floor();
+      int linha = (localPosition.dy / (tamanhoPixel * _zoomLevel)).floor();
       if (linha >= 0 &&
           linha < widget.altura &&
           coluna >= 0 &&
