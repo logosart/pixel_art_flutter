@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 71, 71, 71), // Define a cor de fundo da appbar como cinza
+        backgroundColor: Colors.grey[800], // Define a cor de fundo da appbar como cinza
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CircleAvatar( // Move o perfil para o canto superior esquerdo
@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
             radius: 20,
           ),
         ),
-        title: Center(child: Text('Home')), // Centraliza o texto 'Home' na appbar
+        title: Center(child: Text('PIXELS', style: TextStyle(fontWeight: FontWeight.bold))), // Centraliza o texto 'PIXELS' na appbar
         actions: [
           IconButton(
             icon: Icon(Icons.menu), // Adiciona o ícone do menu de 3 barras no lado superior direito
@@ -26,32 +26,31 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: const Color.fromARGB(255, 92, 92, 92), // Altera a cor do corpo da tela para vermelho
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  _mostrarDialogoCriar(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Criar"
-                ),
-                child: Text('Criar'),
+        color: Colors.blue[600], // Altera a cor do corpo da tela para vermelho
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _mostrarDialogoCriar(context);
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Criar"
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _importarPixelArt(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Importar"
-                ),
-                child: Text('Importar'),
+              child: Text('Criar', style: TextStyle(fontSize: 18)),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _importarPixelArt(context);
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(200, 50), // Define o tamanho mínimo do botão "Importar"
               ),
-            ],
-          ),
+              child: Text('Importar', style: TextStyle(fontSize: 18)),
+            ),
+          ],
         ),
       ),
     );
@@ -65,7 +64,7 @@ class HomePage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Criar Pixel Art'),
+          title: Text('Criar Pixel Art', style: TextStyle(fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -101,7 +100,7 @@ class HomePage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Criar'),
+              child: Text('Criar', style: TextStyle(fontSize: 18)),
             ),
           ],
         );

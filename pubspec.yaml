@@ -9,7 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_gallery_saver: ^1.6.8 
+  image_gallery_saver: ^2.0.3 
+  image_picker: ^0.8.4+4
+  flutter_painter: ^1.0.1
 
 dev_dependencies:
   flutter_test:
